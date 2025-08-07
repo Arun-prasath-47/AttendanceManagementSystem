@@ -1,0 +1,162 @@
+﻿@model IEnumerable<AttendanceManagementSystem.Models.Faculty>
+
+@{
+    ViewData["Title"] = "Faculties Management";
+    string currentFilter = ViewData["CurrentFilter"] as string ?? "";
+    string currentDept = ViewData["CurrentDept"] as string ?? "";
+    var departments = ViewData["Departments"] as List<string> ?? new List<string>();
+    string sortBy = (ViewData["SortBy"] as string ?? "name").ToLower();
+    string sortDir = (ViewData["SortDir"] as string ?? "asc").ToLower();
+}
+
+<div class="container py-4">
+    <!-- Padding top & bottom equal (24px) -->
+    <!-- Alerts -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mb-3">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger mb-3">@TempData["Error"]</div>
+    }
+
+    <!-- Main Card Section -->
+    <div class="card shadow" style="border-radius: 14px; background-color: #f6f8fa;">
+        <div class="card-body">
+
+            <div class="d-md-flex justify-content-between align-items-center mb-3">
+                <h2 class="fw-bold mb-2 mb-md-0" style="color:#1c3a4e;">Faculties</h2>
+                <div>
+                    <a href="@Url.Action("Index", "AdminDashboard")" class="btn btn-outline-secondary me-2">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                    <a href="@Url.Action("AddFaculty", "AdminDashboard")" class="btn btn-primary">
+                        <i class="bi bi-plus-lg"></i> Add New Faculty
+                    </a>
+                </div>
+            </div>
+
+            <form method="get" asp-action="Faculties" class="row gy-2 gx-3 align-items-center mb-4">
+                <div class="col-sm-4">
+                    <input type="text" name="searchString" class="form-control"
+                           placeholder="Search by name, email, or department"
+                           value="@currentFilter" />
+                </div>
+                <div class="col-sm-3">
+                    <select name="deptFilter" class="form-select">
+                        <option value="">All Departments</option>
+                        @foreach (var d in departments)
+                        {
+                            if (d == currentDept)
+                            {
+                                <option value="@d" selected>@d</option>
+                            }
+                            else
+                            {
+                                <option value="@d">@d</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3 d-flex">
+                    <label class="form-label mb-0 fw-semibold me-2 mt-2">Sort By</label>
+                    <select name="sortBy" class="form-select w-auto me-2">
+                        @if (sortBy == "name")
+                        {
+                            <option value="name" selected>Name</option>
+                        }
+                        else
+                        {
+                            <option value="name">Name</option>
+                        }
+                        @if (sortBy == "dob")
+                        {
+                            <option value="dob" selected>DOB</option>
+                        }
+                        else
+                        {
+                            <option value="dob">DOB</option>
+                        }
+                        @if (sortBy == "dept")
+                        {
+                            <option value="dept" selected>Department</option>
+                        }
+                        else
+                        {
+                            <option value="dept">Department</option>
+                        }
+                    </select>
+                    <select name="sortDir" class="form-select w-auto">
+                        @if (sortDir == "asc")
+                        {
+                            <option value="asc" selected>↑ Asc</option>
+                        }
+                        else
+                        {
+                            <option value="asc">↑ Asc</option>
+                        }
+                        @if (sortDir == "desc")
+                        {
+                            <option value="desc" selected>↓ Desc</option>
+                        }
+                        else
+                        {
+                            <option value="desc">↓ Desc</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-outline-primary px-4">Apply</button>
+                </div>
+                <div class="col-auto">
+                    <a href="@Url.Action("Faculties", "AdminDashboard")" class="btn btn-outline-secondary px-4">Reset</a>
+                </div>
+            </form>
+
+            <!-- Scrollable table wrapper -->
+            <div class="table-scroll-wrapper">
+                <table class="table table-hover align-middle border rounded table-striped">
+                    <thead class="table-light fw-semibold" style="background:#e9ecef;">
+                        <tr>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>DOB</th>
+                            <th>Department</th>
+                            <th>Mobile</th>
+                            <th style="min-width: 140px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            foreach (var faculty in Model)
+                            {
+                                <tr>
+                                    <td>@faculty.Email</td>
+                                    <td>@faculty.Name</td>
+                                    <td>@faculty.DOB.ToString("yyyy-MM-dd")</td>
+                                    <td>@faculty.DeptName (@faculty.DeptCode)</td>
+                                    <td>@faculty.MobileNumber</td>
+                                    <td>
+                                        <a href="@Url.Action("EditFaculty", "AdminDashboard", new { id = faculty.Email })"
+                                           class="btn btn-outline-warning btn-sm me-1">Edit</a>
+                                        <a href="@Url.Action("DeleteFaculty", "AdminDashboard", new { id = faculty.Email })"
+                                           class="btn btn-outline-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No faculty records found.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

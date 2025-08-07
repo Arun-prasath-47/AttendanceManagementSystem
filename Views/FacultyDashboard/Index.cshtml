@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Faculty Dashboard";
+    var email = ViewBag.FacultyEmail as string ?? "";
+    var displayName = ViewBag.FacultyName as string ?? email; // Prefer name if present
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Welcome, @displayName!</h1>
+        <form method="post" asp-controller="Home" asp-action="Logout" class="mb-0">
+            <button type="submit" class="btn btn-outline-danger">Logout</button>
+        </form>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4 h-100 d-flex flex-column">
+                <h3 class="card-title mb-3">Mark Attendance</h3>
+                <a href="@Url.Action("MarkAttendance", "FacultyDashboard", new { email = email })"
+                   class="btn btn-success mt-auto">
+                    <i class="bi bi-check2-square"></i> Mark Attendance
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4 h-100 d-flex flex-column">
+                <h3 class="card-title mb-3">Attendance History</h3>
+                <a href="@Url.Action("AttendanceHistory", "FacultyDashboard", new { email = email })"
+                   class="btn btn-primary mt-auto">
+                    <i class="bi bi-clock-history"></i> View Attendance History
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

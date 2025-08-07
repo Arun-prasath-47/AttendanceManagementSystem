@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Attendance Management System";
+}
+<div id="background-slider" class="background-slider">
+    <div class="header">
+        Attendance Management System
+        <a href="@Url.Action("Login", "Home")" class="login-btn">Login</a>
+    </div>
+    <div class="welcome">
+        <p>Welcome! Please log in to continue.</p>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        const images = [
+            '@Url.Content("~/images/image1.jpg")',
+            '@Url.Content("~/images/image2.jpeg")',
+            '@Url.Content("~/images/image3.jpg")',
+            '@Url.Content("~/images/image4.jpg")',
+            '@Url.Content("~/images/image5.jpg")'
+        ];
+        let idx = 0;
+        function updateBackground() {
+            document.getElementById('background-slider').style.backgroundImage = `url('${images[idx]}')`;
+            idx = (idx + 1) % images.length;
+        }
+        // Initial background
+        updateBackground();
+        setInterval(updateBackground, 3000);
+    </script>
+}

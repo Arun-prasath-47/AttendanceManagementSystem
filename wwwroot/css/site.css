@@ -1,0 +1,284 @@
+html, body {
+    width: 100vw;
+    height: 100vh;
+    min-width: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.background-slider {
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding-top: 40px;
+}
+
+.header {
+    width: auto;
+    min-width: 360px;
+    max-width: 90vw;
+    background: rgba(47, 79, 79, 0.68);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 36px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    font-size: 2.4rem;
+    font-weight: bold;
+    border-radius: 8px;
+    position: relative;
+}
+
+.login-btn {
+    margin-left: 20px;
+    background: #007bff;
+    padding: 10px 24px;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background 0.3s;
+    font-size: 1.1rem;
+}
+
+    .login-btn:hover {
+        background: #0056b3;
+    }
+
+.welcome {
+    text-align: center;
+    font-size: 1.3em;
+    color: #fff;
+    text-shadow: 0 2px 10px #222;
+    margin-top: 32px;
+}
+
+
+.login-center-container {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5fa; /* subtle background, change if you want */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.login-container {
+    max-width: 400px;
+    width: 100%;
+    padding: 40px 32px 28px 32px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 0 24px #8bb3d9, 0 0 4px #007bff10;
+    text-align: left;
+}
+
+    .login-container h2 {
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 4px;
+    border: 1px solid #bdbdbd;
+    margin-bottom: 0;
+    background: #f8f9fa;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+}
+
+
+.table thead th {
+    vertical-align: middle;
+    background: #f4f6fa;
+    border-bottom: 2px solid #bbb;
+    font-size: 1.07rem;
+}
+
+.table tbody td, .table thead th {
+    padding: 0.85rem 0.7rem;
+}
+
+.btn-outline-warning {
+    color: #856404;
+    background-color: transparent;
+    border-color: #ffc107;
+}
+
+    .btn-outline-warning:hover {
+        background-color: #ffe082;
+    }
+
+.btn-outline-danger {
+    color: #c82333;
+    background-color: transparent;
+    border-color: #e3342f;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #f8d7da;
+    }
+
+.card {
+    background: #f6f8fa;
+    border-radius: 14px;
+}
+
+.table-light th {
+    color: #295280;
+    font-weight: 600;
+    background-color: #e9ecef !important;
+    border-bottom: 2px solid #dee2e6 !important;
+}
+
+.btn-outline-warning {
+    color: #856404;
+    border-color: #ffc107;
+}
+
+    .btn-outline-warning:hover {
+        background-color: #ffe082;
+    }
+
+.btn-outline-danger {
+    color: #c82333;
+    border-color: #e3342f;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #f8d7da;
+    }
+
+.btn-primary {
+    background: #295dd1;
+    border-color: #295dd1;
+}
+
+    .btn-primary:hover {
+        background: #174cb7;
+        border-color: #174cb7;
+    }
+
+
+.card {
+    background: #f6f8fa;
+    border-radius: 14px;
+}
+
+.table-light th {
+    color: #295280;
+    font-weight: 600;
+    background-color: #e9ecef !important;
+    border-bottom: 2px solid #dee2e6 !important;
+}
+
+.btn-outline-warning {
+    color: #856404;
+    border-color: #ffc107;
+}
+
+    .btn-outline-warning:hover {
+        background-color: #ffe082;
+    }
+
+.btn-outline-danger {
+    color: #c82333;
+    border-color: #e3342f;
+}
+
+    .btn-outline-danger:hover {
+        background-color: #f8d7da;
+    }
+
+.btn-primary {
+    background: #295dd1;
+    border-color: #295dd1;
+}
+
+    .btn-primary:hover {
+        background: #174cb7;
+        border-color: #174cb7;
+    }
+
+
+/* Make the card-body a flex container for proper height management */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 420px; /* adjust if needed */
+}
+
+/* Scrollable wrapper with fixed max-height to enable scrolling */
+.table-scroll-wrapper {
+    flex: 1 1 auto;
+    min-height: 0; /* important for flexbox scrolling */
+    max-height: 520px; /* fixed max-height height */
+    overflow-y: auto !important; /* ensures vertical scrollbar */
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 4px;
+    background-color: white;
+}
+
+    /* Optional scrollbar styling */
+    .table-scroll-wrapper::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .table-scroll-wrapper::-webkit-scrollbar-thumb {
+        background-color: rgba(41, 82, 128, 0.5);
+        border-radius: 4px;
+    }
+
+        .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(41, 82, 128, 0.8);
+        }

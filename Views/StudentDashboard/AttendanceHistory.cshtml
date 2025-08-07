@@ -1,0 +1,159 @@
+﻿@{
+    string roll = ViewBag.Roll as string ?? "";
+    int year = (int)ViewBag.Year;
+    int month = (int)ViewBag.Month;
+    var grid = ViewBag.Grid as IDictionary<DateTime, string> ?? new Dictionary<DateTime, string>();
+    var table = ViewBag.Table as IEnumerable<AttendanceManagementSystem.Models.Attendance> ?? new List<AttendanceManagementSystem.Models.Attendance>();
+
+    int present = (int)ViewBag.Present;
+    int absent = (int)ViewBag.Absent;
+    int late = (int)ViewBag.Late;
+    int notMarked = (int)ViewBag.NotMarked;
+    var today = DateTime.Today;
+
+    var monthName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+    DateTime firstDayOfMonth = new DateTime(year, month, 1);
+    int firstDayOfWeek = (int)firstDayOfMonth.DayOfWeek;
+    int daysInMonth = DateTime.DaysInMonth(year, month);
+    int totalCells = ((firstDayOfWeek + daysInMonth) % 7 == 0)
+        ? (firstDayOfWeek + daysInMonth)
+        : (firstDayOfWeek + daysInMonth + 7 - (firstDayOfWeek + daysInMonth) % 7);
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body pb-2">
+                    <h2 class="text-center mb-3">My Attendance – @monthName @year</h2>
+                    <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
+                        <a asp-action="AttendanceHistory" asp-route-roll="@roll" asp-route-year="@(month == 1 ? year - 1 : year)" asp-route-month="@(month == 1 ? 12 : month - 1)" class="btn btn-outline-secondary btn-sm">&lt; Prev</a>
+                        <strong style="font-size: 1.2em;">@monthName @year</strong>
+                        <a asp-action="AttendanceHistory" asp-route-roll="@roll" asp-route-year="@(month == 12 ? year + 1 : year)" asp-route-month="@(month == 12 ? 1 : month + 1)" class="btn btn-outline-secondary btn-sm">Next &gt;</a>
+                    </div>
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <span class="badge rounded-pill bg-success fs-6">Present: @present</span>
+                        <span class="badge rounded-pill bg-danger fs-6">Absent: @absent</span>
+                        <span class="badge rounded-pill bg-warning text-dark fs-6">Late: @late</span>
+                        <span class="badge rounded-pill bg-secondary fs-6">Not Marked: @notMarked</span>
+                    </div>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-bordered text-center attendance-month-calendar" style="min-width:330px;">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Su</th>
+                                    <th>Mo</th>
+                                    <th>Tu</th>
+                                    <th>We</th>
+                                    <th>Th</th>
+                                    <th>Fr</th>
+                                    <th>Sa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int cell = 0;
+                                    for (int row = 0; row < totalCells / 7; row++)
+                                    {
+                                        <tr>
+                                            @for (int col = 0; col < 7; col++, cell++)
+                                            {
+                                                int dayVal = cell - firstDayOfWeek + 1;
+                                                if (cell < firstDayOfWeek || dayVal > daysInMonth)
+                                                {
+                                                    <td></td>
+                                                }
+                                                else
+                                                {
+                                                    var d = new DateTime(year, month, dayVal);
+                                                    var status = grid.ContainsKey(d) ? grid[d] : "Not Marked";
+                                                    string statusClass = status switch
+                                                    {
+                                                        "Present" => "bg-success text-white",
+                                                        "Absent" => "bg-danger text-white",
+                                                        "Late" => "bg-warning text-dark",
+                                                        "Not Marked" => "bg-secondary text-white",
+                                                        _ => "bg-light text-dark"
+                                                    };
+                                                    bool isToday = (d == today);
+                                                    <td class="attendance-cell @statusClass @(isToday ? "border border-primary border-2" : "")"
+                                                        title="@($"{d:yyyy-MM-dd}: {status}")"
+                                                        style="height:36px;width:36px;vertical-align:middle">
+                                                        @dayVal
+                                                    </td>
+                                                }
+                                            }
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <style>
+                            .attendance-month-calendar th, .attendance-month-calendar td {
+                                text-align: center;
+                                vertical-align: middle;
+                                font-size: 15px;
+                                padding: 0 !important;
+                            }
+
+                            .attendance-cell {
+                                border-radius: 5px;
+                                font-weight: bold;
+                                cursor: pointer;
+                                transition: border-color 0.2s;
+                            }
+                        </style>
+                    </div>
+                    <hr />
+                    <h5 class="mb-3">Detailed History</h5>
+                    <div class="mb-2" style="border: 1px solid #d1d8e1; border-radius: 7px; background: #f8fafc;">
+                        @if (!table.Any())
+                        {
+                            <div class="alert alert-info text-center my-4 py-4 mb-0">
+                                <strong>No attendance records found for this month.</strong>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Scrollable grid/table container -->
+                            <div style="max-height: 180px; overflow-y: auto;">
+                                <table class="table table-hover table-bordered mt-2 align-middle mb-0">
+                                    <thead class="table-light sticky-top">
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var record in table)
+                                        {
+                                            string statusClass = record.Status switch
+                                            {
+                                                "Present" => "badge bg-success",
+                                                "Absent" => "badge bg-danger",
+                                                "Late" => "badge bg-warning text-dark",
+                                                "Not Marked" => "badge bg-secondary",
+                                                _ => "badge bg-light text-dark"
+                                            };
+                                            <tr>
+                                                <td>@record.Date.ToString("yyyy-MM-dd")</td>
+                                                <td><span class="@statusClass">@record.Status</span></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 pt-0">
+                    <div class="d-flex justify-content-start">
+                        <a asp-action="Index" asp-route-roll="@roll" class="btn btn-outline-secondary mb-0">
+                            <i class="bi bi-chevron-left"></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

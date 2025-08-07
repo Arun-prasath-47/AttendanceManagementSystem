@@ -1,0 +1,92 @@
+﻿@model AttendanceManagementSystem.Models.Faculty
+
+@{
+    ViewData["Title"] = "Add Faculty";
+}
+
+<h2 class="text-center mb-4">Add New Faculty</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center">@TempData["SuccessMessage"]</div>
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height:70vh;">
+    <div class="card shadow" style="max-width:440px; width:100%; padding:25px 24px; border-radius:10px;">
+        <form asp-action="AddFaculty" method="post">
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" type="email" required />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" required />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="DOB" class="form-label"></label>
+                <input asp-for="DOB" class="form-control" type="date" required />
+                <span asp-validation-for="DOB" class="text-danger"></span>
+            </div>
+            <!-- Department Dropdown -->
+            <div class="form-group mb-3">
+                <label for="Department">Department</label>
+                <select asp-for="DeptCode" class="form-control" id="Department" name="DeptCode" required onchange="setDeptName(this)">
+                    <option value="">-- Select Department --</option>
+                    <option value="AD">AD - Artificial Intelligence and Data Science</option>
+                    <option value="CE">CE - Civil Engineering</option>
+                    <option value="CS">CS - Computer Science and Engineering</option>
+                    <option value="EC">EC - Electronics and Communication Engineering</option>
+                    <option value="EE">EE - Electrical and Electronics Engineering</option>
+                    <option value="EV">EV - Electronics Engineering (VLSI Design and Technology)</option>
+                    <option value="IT">IT - Information Technology</option>
+                    <option value="ME">ME - Mechanical Engineering</option>
+                    <option value="SC">SC - Computer Science and Engineering (Cyber Security)</option>
+                </select>
+                <span asp-validation-for="DeptCode" class="text-danger"></span>
+            </div>
+            <!-- DeptName auto-filled/read-only -->
+            <div class="form-group mb-3">
+                <label asp-for="DeptName" class="form-label"></label>
+                <input asp-for="DeptName" id="DeptName" class="form-control" readonly required />
+                <span asp-validation-for="DeptName" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="MobileNumber" class="form-label"></label>
+                <input asp-for="MobileNumber" class="form-control" type="tel" required />
+                <span asp-validation-for="MobileNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" type="password" required />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-success">Add Faculty</button>
+                <a asp-action="Faculties" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Set DeptName when department changes
+        function setDeptName(select) {
+            var names = {
+                'AD': 'Artificial Intelligence and Data Science',
+                'CE': 'CIVIL ENGINEERING',
+                'CS': 'COMPUTER SCIENCE AND ENGINEERING',
+                'EC': 'ELECTRONICS AND COMMUNICATION ENGINEERING',
+                'EE': 'ELECTRICAL AND ELECTRONICS ENGINEERING',
+                'EV': 'Electronics Engineering (VLSI Design and Technology)',
+                'IT': 'INFORMATION TECHNOLOGY',
+                'ME': 'MECHANICAL ENGINEERING',
+                'SC': 'Computer Science and Engineering (Cyber Security)'
+            };
+            document.getElementById('DeptName').value = names[select.value] || '';
+        }
+    </script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
