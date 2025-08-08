@@ -64,11 +64,13 @@ namespace AttendanceManagementSystem.Controllers
             {
                 for (int i = 0; i < rollNumbers.Length; i++)
                 {
+                    // Find existing attendance for the student and date, ignoring faculty email
                     var attendance = _context.Attendances.FirstOrDefault(a =>
-                        a.RollNumber == rollNumbers[i] && a.Date == date && a.FacultyEmail == facultyEmail);
+                        a.RollNumber == rollNumbers[i] && a.Date == date);
 
                     if (attendance == null)
                     {
+                        // No existing record, add new
                         _context.Attendances.Add(new Attendance
                         {
                             RollNumber = rollNumbers[i],
@@ -79,7 +81,10 @@ namespace AttendanceManagementSystem.Controllers
                     }
                     else
                     {
+                        // Update existing record with latest status and faculty
                         attendance.Status = statuses[i];
+                        attendance.FacultyEmail = facultyEmail;
+                        _context.Attendances.Update(attendance);
                     }
                 }
 
@@ -89,7 +94,7 @@ namespace AttendanceManagementSystem.Controllers
             }
             catch (Exception ex)
             {
-                // Log exception here (not shown)
+                // Optional: Log exception (ex)
                 TempData["Error"] = "Error saving attendance. Please try again.";
             }
 
@@ -112,7 +117,6 @@ namespace AttendanceManagementSystem.Controllers
 
             return View(attendances);
         }
-
 
         // Utility: Fill "Not Marked" entries for yesterday for any missing attendance
         // -- scheduled job, non-web --
