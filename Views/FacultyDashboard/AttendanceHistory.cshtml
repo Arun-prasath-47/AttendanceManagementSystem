@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AttendanceManagementSystem.Models.Attendance> 
+﻿@model IEnumerable<AttendanceManagementSystem.Models.Attendance>
 @{
     ViewData["Title"] = "Attendance History";
     string facultyEmail = ViewBag.FacultyEmail as string ?? "";
@@ -9,7 +9,7 @@
     <div class="row justify-content-center">
         <div class="col-lg-10 col-xl-8">
             <div class="card shadow mb-4" style="border-radius:1rem;background:#f6fafc;">
-                <div class="card-body">
+                <div class="card-body" style="overflow-y:auto; max-height:75vh;">
 
                     <!-- SUCCESS and ERROR Alerts -->
                     @if (TempData["SuccessMessage"] != null)
@@ -48,7 +48,7 @@
                     }
                     else
                     {
-                        <div class="table-scroll-wrapper mb-3">
+                        <div class="table-scroll-wrapper mb-3" style="max-height:none; overflow: visible;">
                             <table class="table table-striped table-bordered align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
