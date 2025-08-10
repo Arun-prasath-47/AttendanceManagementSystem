@@ -3,7 +3,6 @@
     int year = (int)ViewBag.Year;
     int month = (int)ViewBag.Month;
     var grid = ViewBag.Grid as IDictionary<DateTime, string> ?? new Dictionary<DateTime, string>();
-    var table = ViewBag.Table as IEnumerable<AttendanceManagementSystem.Models.Attendance> ?? new List<AttendanceManagementSystem.Models.Attendance>();
 
     int present = (int)ViewBag.Present;
     int absent = (int)ViewBag.Absent;
@@ -22,23 +21,37 @@
 
 <div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-7">
+        <div class="col-md-10 col-lg-9">
+            <!-- Made wider -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body pb-2">
                     <h2 class="text-center mb-3">My Attendance – @monthName @year</h2>
+
+                    <!-- Month Navigation -->
                     <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
-                        <a asp-action="AttendanceHistory" asp-route-roll="@roll" asp-route-year="@(month == 1 ? year - 1 : year)" asp-route-month="@(month == 1 ? 12 : month - 1)" class="btn btn-outline-secondary btn-sm">&lt; Prev</a>
-                        <strong style="font-size: 1.2em;">@monthName @year</strong>
-                        <a asp-action="AttendanceHistory" asp-route-roll="@roll" asp-route-year="@(month == 12 ? year + 1 : year)" asp-route-month="@(month == 12 ? 1 : month + 1)" class="btn btn-outline-secondary btn-sm">Next &gt;</a>
+                        <a asp-action="AttendanceHistory" asp-route-roll="@roll"
+                           asp-route-year="@(month == 1 ? year - 1 : year)"
+                           asp-route-month="@(month == 1 ? 12 : month - 1)"
+                           class="btn btn-outline-secondary btn-sm">&lt; Prev</a>
+                        <strong style="font-size: 1.4em;">@monthName @year</strong>
+                        <a asp-action="AttendanceHistory" asp-route-roll="@roll"
+                           asp-route-year="@(month == 12 ? year + 1 : year)"
+                           asp-route-month="@(month == 12 ? 1 : month + 1)"
+                           class="btn btn-outline-secondary btn-sm">Next &gt;</a>
                     </div>
+
+                    <!-- Summary -->
                     <div class="d-flex justify-content-center gap-3 mb-3">
-                        <span class="badge rounded-pill bg-success fs-6">Present: @present</span>
-                        <span class="badge rounded-pill bg-danger fs-6">Absent: @absent</span>
-                        <span class="badge rounded-pill bg-warning text-dark fs-6">Late: @late</span>
-                        <span class="badge rounded-pill bg-secondary fs-6">Not Marked: @notMarked</span>
+                        <span class="badge rounded-pill badge-present fs-6">Present: @present</span>
+                        <span class="badge rounded-pill badge-absent fs-6">Absent: @absent</span>
+                        <span class="badge rounded-pill badge-late fs-6">Late: @late</span>
+                        <span class="badge rounded-pill badge-not-marked fs-6">Not Marked: @notMarked</span>
                     </div>
+
+
+                    <!-- Calendar -->
                     <div class="table-responsive mb-4">
-                        <table class="table table-bordered text-center attendance-month-calendar" style="min-width:330px;">
+                        <table class="table table-bordered text-center attendance-month-calendar">
                             <thead class="table-light">
                                 <tr>
                                     <th>Su</th>
@@ -69,16 +82,16 @@
                                                     var status = grid.ContainsKey(d) ? grid[d] : "Not Marked";
                                                     string statusClass = status switch
                                                     {
-                                                        "Present" => "bg-success text-white",
-                                                        "Absent" => "bg-danger text-white",
-                                                        "Late" => "bg-warning text-dark",
-                                                        "Not Marked" => "bg-secondary text-white",
-                                                        _ => "bg-light text-dark"
+                                                        "Present" => "present",
+                                                        "Absent" => "absent",
+                                                        "Late" => "late",
+                                                        "Not Marked" => "not-marked",
+                                                        _ => "default-day"
                                                     };
+
                                                     bool isToday = (d == today);
-                                                    <td class="attendance-cell @statusClass @(isToday ? "border border-primary border-2" : "")"
-                                                        title="@($"{d:yyyy-MM-dd}: {status}")"
-                                                        style="height:36px;width:36px;vertical-align:middle">
+                                                    <td class="attendance-cell @statusClass @(isToday ? "today-border" : "")"
+                                                        title="@($"{d:yyyy-MM-dd}: {status}")">
                                                         @dayVal
                                                     </td>
                                                 }
@@ -88,64 +101,81 @@
                                 }
                             </tbody>
                         </table>
+
+                        <!-- Custom Styles -->
                         <style>
-                            .attendance-month-calendar th, .attendance-month-calendar td {
+                            .attendance-month-calendar th,
+                            .attendance-month-calendar td {
                                 text-align: center;
                                 vertical-align: middle;
-                                font-size: 15px;
+                                font-size: 18px;
+                                height: 60px;
+                                width: 60px;
                                 padding: 0 !important;
                             }
 
                             .attendance-cell {
-                                border-radius: 5px;
+                                border-radius: 6px;
                                 font-weight: bold;
                                 cursor: pointer;
-                                transition: border-color 0.2s;
+                                color: white;
+                                transition: transform 0.2s;
+                            }
+
+                                .attendance-cell:hover {
+                                    transform: scale(1.1);
+                                }
+
+                            .present {
+                                background-color: #6BEE37 !important; /* Light green */
+                                color: #000 !important;
+                            }
+
+                            .absent {
+                                background-color: #E55151 !important; /* Light red */
+                                color: #000 !important;
+                            }
+
+                            .late {
+                                background-color: #f4c542 !important; /* Orange */
+                                color: #000 !important;
+                            }
+
+                            .not-marked {
+                                background-color: #b0b0b0 !important; /* Ash grey */
+                                color: #000 !important;
+                            }
+
+                            .badge-present {
+                                background-color: #6BEE37 !important; /* match your calendar present color */
+                                color: #000 !important;
+                            }
+
+                            .badge-absent {
+                                background-color: #E55151 !important; /* match your calendar absent color */
+                                color: #000 !important;
+                            }
+
+                            .badge-late {
+                                background-color: #f4c542 !important; /* match your calendar late color */
+                                color: #000 !important;
+                            }
+
+                            .badge-not-marked {
+                                background-color: #b0b0b0 !important; /* match your calendar not-marked color */
+                                color: #000 !important;
+                            }
+
+
+
+                            /* Highlight today's date */
+                            .today-border {
+                                border: 3px solid #007bff;
                             }
                         </style>
                     </div>
-                    <hr />
-                    <h5 class="mb-3">Detailed History</h5>
-                    <div class="mb-2" style="border: 1px solid #d1d8e1; border-radius: 7px; background: #f8fafc;">
-                        @if (!table.Any())
-                        {
-                            <div class="alert alert-info text-center my-4 py-4 mb-0">
-                                <strong>No attendance records found for this month.</strong>
-                            </div>
-                        }
-                        else
-                        {
-                            <!-- Scrollable grid/table container -->
-                            <div style="max-height: 180px; overflow-y: auto;">
-                                <table class="table table-hover table-bordered mt-2 align-middle mb-0">
-                                    <thead class="table-light sticky-top">
-                                        <tr>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var record in table)
-                                        {
-                                            string statusClass = record.Status switch
-                                            {
-                                                "Present" => "badge bg-success",
-                                                "Absent" => "badge bg-danger",
-                                                "Late" => "badge bg-warning text-dark",
-                                                "Not Marked" => "badge bg-secondary",
-                                                _ => "badge bg-light text-dark"
-                                            };
-                                            <tr>
-                                                <td>@record.Date.ToString("yyyy-MM-dd")</td>
-                                                <td><span class="@statusClass">@record.Status</span></td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                    </div>
                 </div>
+
                 <div class="card-footer bg-white border-0 pt-0">
                     <div class="d-flex justify-content-start">
                         <a asp-action="Index" asp-route-roll="@roll" class="btn btn-outline-secondary mb-0">
