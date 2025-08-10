@@ -247,3 +247,35 @@ html, body {
         .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
             background-color: rgba(41, 82, 128, 0.8);
         }
+
+/* Carousel full height */
+#homeCarousel,
+#homeCarousel .carousel-inner,
+#homeCarousel .carousel-item,
+#homeCarousel img {
+    height: 100vh;
+    object-fit: cover;
+}
+
+/* Dark overlay effect */
+.carousel-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2rem 3rem;
+    border-radius: 1rem;
+    backdrop-filter: blur(8px);
+}
+
+/* Make text responsive */
+@media (max-width: 768px) {
+    .carousel-overlay {
+        padding: 1.5rem;
+    }
+
+        .carousel-overlay h1 {
+            font-size: 1.8rem;
+        }
+}
